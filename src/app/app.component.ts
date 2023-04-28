@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, NgZone} from '@angular/core';
+import {Platform} from "@ionic/angular";
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,5 +15,26 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  constructor(
+    private platform: Platform,
+    private ngZone: NgZone
+  ) {
+    this.initialApp();
+  }
+
+  initialApp() {
+    if (this.platform.is('cordova')) {
+      (window as any).handleOpenURL = (callbackUrl: any) => {
+        console.log('🚀 ~ file: auth.factory.ts ~ line 20 ~ callbackUrl', callbackUrl);
+
+        // this.ngZone.run(() => {
+        //   if (callbackUrl.indexOf(authService.authConfig.redirect_url) === 0) {
+        //     authService.authorizationCallback(callbackUrl);
+        //   } else {
+        //     authService.endSessionCallback();
+        //   }
+        // });
+      };
+    }
+  }
 }
